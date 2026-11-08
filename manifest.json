@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "id": "local.macos-classic-theme",
+  "name": "macOS Classic Theme",
+  "description": "Native macOS appearance for PI-Desktop: a full design-token port of huacnlee's macOS Classic theme for Zed, in light and dark.",
+  "version": "1.0.0",
+  "author": "Port of huacnlee/zed-theme-macos-classic (MIT)",
+  "repository": "https://github.com/XELZSSS/PI-Mac-OS-Classic-Theme",
+  "main": "main.js",
+  "i18n": {
+    "en": {
+      "name": "macOS Classic Theme",
+      "description": "Native macOS appearance for PI-Desktop: a full design-token port of huacnlee's macOS Classic theme for Zed, in light and dark."
+    },
+    "zh-CN": {
+      "name": "macOS 经典主题",
+      "description": "让 PI-Desktop 呈现 macOS 原生外观：把 huacnlee 的 macOS Classic（Zed 主题）完整移植为 PI-Desktop 设计令牌，含浅色与深色。"
+    }
+  },
+  "contributes": {
+    "themes": [
+      {
+        "id": "macos-classic-light",
+        "label": "macOS Classic Light",
+        "path": "themes/macos-classic-light.css",
+        "base": "light"
+      },
+      {
+        "id": "macos-classic-dark",
+        "label": "macOS Classic Dark",
+        "path": "themes/macos-classic-dark.css",
+        "base": "dark"
+      }
+    ],
+    "windowAppearance": {
+      "backgroundColor": {
+        "light": "#f2f2f2",
+        "dark": "#050505"
+      }
+    },
+    "commands": [
+      {
+        "id": "macos-classic-theme.apply-light",
+        "title": "macOS Classic: Apply Light Theme",
+        "category": "Theme",
+        "keywords": ["theme", "macos", "classic", "light"]
+      },
+      {
+        "id": "macos-classic-theme.apply-dark",
+        "title": "macOS Classic: Apply Dark Theme",
+        "category": "Theme",
+        "keywords": ["theme", "macos", "classic", "dark"]
+      }
+    ]
+  },
+  "permissions": ["ui.theme", "ui.window.appearance"],
+  "engines": {
+    "piDesktop": ">=0.21.0"
+  },
+  "activationEvents": [
+    "onStartup",
+    "onCommand:macos-classic-theme.apply-light",
+    "onCommand:macos-classic-theme.apply-dark"
+  ]
+}

@@ -1,0 +1,323 @@
+/*
+  macOS Classic Light — PI-Desktop contributed theme (base: light).
+
+  Restored to the **initial release styling** of this plugin: the token map as
+  first submitted, the code-plate repaint, and the two primitives (scrollbar,
+  selection). Nothing else — no control/card geometry layer, no hairline rings,
+  no opacity or blur overrides, no syntax recolouring.
+
+  Two deliberate deviations from that release, and only these two:
+
+  1. Shadows are off. All 98 audited drop shadows in the 0.22.0 stylesheets are
+     disabled with `!important`, the 13 rules that mixed a ring with a drop keep
+     the ring alone, and the four elevation tokens resolve to `none`.
+  2. Colour depth stays at the current, legible level: ink `#000000 / #2b2b2b /
+     #4a4a4a / #6a6a6a`, borders `#b8b8b8 / #d4d4d4 / #9a9a9a`, tonal washes
+6–13%. Hues and depth are the shipped values (dark page #050505, panels #1a1a1a;
+     light page #f2f2f2, panels #e4e4e4, blue accents #307bf6 / #1f6ae2).
+
+  Host rules obeyed: no stylesheet chaining, no external references beyond
+  data: URIs or declared assets, 256 KiB cap, no markup; a light-base theme must
+  override `:root[data-theme="light"]` because a bare `:root` loses on
+  specificity. --gray-*, --accent-*, --font-*, --text-* and --motion-* stay
+  host-owned; geometry tokens keep host defaults.
+*/
+
+:root[data-theme="light"] {
+  /* Surfaces, deepened from the initial #ffffff / #f9f9f9 / #e9e9e9 so the light
+     theme is not a whiteout: page #f2f2f2, panels #e4e4e4, raised #fafafa. */
+  --ds-bg-primary: #f2f2f2;
+  --ds-bg-under: #dedede;
+  --ds-bg-inset: #e0e0e0;
+  --ds-bg-secondary: #e4e4e4;
+  --ds-bg-tertiary: #d8d8d8;
+  --ds-bg-elevated: #fafafa;
+  --ds-bg-elevated-opaque: #fafafa;
+  --ds-bg-elevated-primary: #fafafa;
+  --ds-bg-hover: #d0d0d0;
+  --ds-bg-active: #c2c2c2;
+  --ds-bg-composer: #ffffff;
+  --ds-bg-chip: color-mix(in oklab, #000000 8%, transparent);
+  --ds-bg-dock: #e4e4e4;
+  --ds-bg-dock-raised: #fafafa;
+
+  /* Sidebar / settings rail: panel surface, the theme's sidebar tint ratios. */
+  --ds-settings-rail-bg: #e4e4e4;
+  --ds-bg-sidebar: #e4e4e4;
+  --ds-bg-sidebar-image: none;
+  --ds-sidebar-glass-tint: color-mix(in oklab, #e4e4e4 55%, transparent);
+  --ds-sidebar-glass-sheen-top: color-mix(in oklab, #ffffff 45%, transparent);
+  --ds-sidebar-glass-sheen-bottom: color-mix(in oklab, #ffffff 30%, transparent);
+
+  /* Ink — initial neutral ink at the current depth. */
+  --ds-text-primary: #000000;
+  --ds-text-secondary: #2b2b2b;
+  --ds-text-muted: #4a4a4a;
+  --ds-text-faint: #6a6a6a;
+  --ds-placeholder-ink: #7a7a7a;
+  --ds-prose-kbd-fg: #333333;
+
+  /* Borders — border #d2d2d2 family, held at the current strength. */
+  --ds-border-default: #b8b8b8;
+  --ds-border-subtle: #d4d4d4;
+  --ds-border-strong: #9a9a9a;
+
+  /* Tonal layers, mixed from the ink token. */
+  --ds-tile: color-mix(in oklab, #000000 6%, transparent);
+  --ds-tile-hover: color-mix(in oklab, #000000 9%, transparent);
+  --ds-tile-deep: color-mix(in oklab, #000000 13%, transparent);
+  --ds-raised: #fafafa;
+  --ds-raised-shadow: none;
+
+  /* Accent: initial blue (text.accent #1f6ae2). */
+  --ds-accent: #1f6ae2;
+  --ds-accent-hover: #1a5ac4;
+  --ds-accent-soft: #84adef;
+  --ds-focus: #1f6ae2;
+
+  /* Fields, switches. */
+  --ds-settings-field-bg: #ffffff;
+  --ds-settings-nav-active: #c7deff;
+  --ds-field-inset-bg: color-mix(in oklab, #000000 7%, transparent);
+  --ds-field-inset-focus-bg: #ffffff;
+  --ds-switch-track-off: color-mix(in oklab, #000000 12%, transparent);
+  --ds-switch-track-off-hover: color-mix(in oklab, #000000 20%, transparent);
+  --ds-switch-ring-off: color-mix(in oklab, #000000 24%, transparent);
+  --ds-switch-knob-off: #ffffff;
+  --ds-switch-knob-on: #ffffff;
+
+  /* Code plates, scrims, transcript fills. */
+  --ds-thinking-code-bg: #ededed;
+  --ds-mermaid-canvas: #ffffff;
+  --ds-code-head-bg: color-mix(in oklab, #000000 5%, transparent);
+  --ds-code-hover-bg: color-mix(in oklab, #000000 8%, transparent);
+  --ds-scrim: color-mix(in oklab, #000000 35%, transparent);
+  --ds-modal-veil: color-mix(in oklab, #000000 40%, transparent);
+  --ds-tool-row-bg: color-mix(in oklab, #000000 4%, transparent);
+  --ds-send-disabled-bg: #7a7a7a;
+  --ds-send-disabled-fg: #ffffff;
+
+  /* Status hues — initial release values. */
+  --ds-success: #036a07;
+  --ds-warning: #957931;
+  --ds-error: #c5060b;
+  --ds-info: #4a4a4a;
+  --ds-purple: #6f42c1;
+
+  /* Elevation is off; see the shadow block below. */
+  --ds-shadow-dialog: none;
+  --ds-shadow-model-menu: none;
+  --ds-shadow-composer: none;
+  --ds-elevation-stroke: none;
+}
+
+/*
+  Code plate and its chrome, as first submitted: the host paints `.code-block` /
+  `.prose-chat pre` / `.mermaid-source` with a literal editor palette from
+  prose.css, so the plate is repainted here; syntax token colours stay whatever
+  the host's Shiki theme produces.
+*/
+:root[data-theme="light"] .code-block {
+  --code-block-bg: #ffffff;
+  color: #000000;
+}
+
+:root[data-theme="light"] .prose-chat pre {
+  background: #ffffff;
+  color: #000000;
+}
+
+:root[data-theme="light"] .prose-chat .mermaid-source {
+  background: #ffffff;
+  color: #000000;
+}
+
+:root[data-theme="light"] .code-block-lang {
+  color: #929292;
+}
+
+:root[data-theme="light"] .code-block .code-copy-btn {
+  color: #6d6d6d;
+}
+
+:root[data-theme="light"] .code-block .code-copy-btn:hover {
+  color: #000000;
+}
+
+/*
+  Shadows off: every pure drop shadow found in the 0.22.0 stylesheets.
+  `!important` is deliberate — it wins over the host rule no matter its
+  specificity or source order, so no layered shadow can survive.
+*/
+.jump-latest-btn,
+.chat-width-handle::before,
+.minimap-popover,
+.home-project-switcher-menu,
+.home-project-switcher-search input,
+.conversation-topbar .ct-title-input,
+.notification-popover,
+.composer-autocomplete,
+:root[data-theme="dark"] .composer-shell,
+.composer-permission-menu,
+.composer-mode-menu,
+.composer-thinking-thumb,
+:root[data-theme="light"] .composer-model-menu,
+.plan-approval-menu,
+.composer-stack > .asktool-card,
+.composer-queued-prompt,
+.composer-shell,
+.composer-shell:focus-within,
+.plan-approval-bar,
+.dock-tab.is-active,
+.dest-filter.active,
+.scope-seg.is-active,
+.ext-field-group > .scope-control .scope-popover,
+.ext-transport-card.is-active,
+.generated-image-actions a,
+.generated-image-viewer-viewport > img,
+.image-hover-card,
+.live-voice-widget .live-voice-call-bar,
+.run-activity-error-popover.message-error,
+.turn-usage-popover,
+.context-inspector-popover,
+.message-edit,
+.message-edit-input:focus,
+.message-edit-input:focus-visible,
+.message-row.assistant .message-bubble,
+.message-row.system .message-bubble,
+.message-row.tool .message-bubble,
+.subagent-topology-root,
+.subagent-topology-node,
+.provider-service-menu,
+.provider-service-search input,
+.provider-service-search input:focus,
+.provider-thinking-chip.selected,
+.model-default-menu,
+.model-default-search input,
+.model-default-search input:focus,
+.service-monogram,
+.model-provider-row.is-dragging,
+.search-dialog,
+.update-notice,
+.toast,
+.backend-banner,
+.chat-error-notice,
+.plugin-launcher-surface,
+.plugins-header-menu,
+.plugins-segment-btn.active,
+.plugins-row-details-body,
+.plugins-shortcut-recorder,
+.plugins-card:hover,
+.project-create-dialog,
+.remote-folder-dialog,
+.prose-chat pre,
+:root[data-theme="light"] .prose-chat pre,
+.code-block,
+.prose-chat .code-block pre,
+.prose-chat .code-block pre code,
+.prose-chat .mermaid-source,
+.settings-segment-item.active,
+.provider-model-card.is-expanded,
+.provider-model-multi-trigger,
+.provider-model-multi-menu,
+.provider-model-menu,
+.service-chooser-search input,
+.service-chooser-search input:focus,
+.sidebar-row-menu,
+.sidebar-popover,
+.sidebar-submenu,
+.sidebar-session-hover-card,
+.plugin-scenic-theme-card,
+.plugin-scenic-blur-control,
+.shortcut-recorder,
+.shortcut-keybinding kbd,
+.settings-toggle-thumb,
+:root[data-theme="light"] .settings-toggle.on .settings-toggle-thumb,
+.settings-pill-select,
+.settings-row-control .field-select,
+.settings-font-menu,
+.settings-language-trigger,
+.settings-theme-trigger,
+.settings-menu-select-trigger,
+.settings-font-trigger,
+.settings-language-menu,
+.settings-theme-menu,
+.settings-menu-select-menu,
+.settings-language-search input,
+.settings-theme-search input,
+:root[data-theme="light"] .agent-capability-search-wrap,
+.extension-status-item,
+.mcpm-card:hover,
+.mcpm-install:hover:not(:disabled),
+.sklm-card:hover,
+.sklm-install:hover:not(:disabled),
+:root[data-theme="light"] .composer-shell,
+.ui-tooltip,
+.dialog,
+.context-menu,
+.radial-menu,
+.live-voice-popup,
+.live-voice-preparation,
+.live-voice-details,
+.live-voice-call-bar,
+.review-select::picker(select) {
+  box-shadow: none !important;
+}
+
+/*
+  The 13 rules that mixed a focus/hover ring with a drop shadow keep their ring
+  and lose only the drop, so focus indication survives the shutdown.
+*/
+.composer-queued-prompt[data-priority="true"] {
+  box-shadow: inset 2px 0 0 0 var(--ds-accent) !important;
+}
+
+.scope-compact-menu,
+.scope-popover,
+.plugins-menu,
+.plugins-reviews,
+.plugins-sheet,
+.plugins-modal,
+.projects-menu,
+.agent-capability-menu {
+  box-shadow: 0 0 0 0.5px var(--ds-border-default) !important;
+}
+
+.plugin-scenic-theme-card.active {
+  box-shadow: 0 0 0 1px var(--ds-accent) !important;
+}
+
+.subagent-topology-node.open {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ds-accent) 22%, transparent) !important;
+}
+
+/* Native macOS overlay scrollbar and the macOS blue selection plate. */
+:root[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: #c8c8c8aa;
+  background-clip: content-box;
+}
+
+:root[data-theme="light"] :hover::-webkit-scrollbar-thumb,
+:root[data-theme="light"] :focus-within::-webkit-scrollbar-thumb,
+:root[data-theme="light"] [data-scrolling]::-webkit-scrollbar-thumb {
+  background: #c8c8c8aa;
+  background-clip: content-box;
+}
+
+:root[data-theme="light"] ::-webkit-scrollbar-thumb:hover,
+:root[data-theme="light"] ::-webkit-scrollbar-thumb:active {
+  background: #c8c8c8;
+  background-clip: content-box;
+}
+
+:root[data-theme="light"] ::selection {
+  background: #c7deff;
+  color: #000000;
+}
+
+:root[data-theme="light"] input::selection,
+:root[data-theme="light"] textarea::selection,
+:root[data-theme="light"] [contenteditable]::selection {
+  background: #b0cffd;
+  color: #000000;
+}
