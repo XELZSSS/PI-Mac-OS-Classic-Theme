@@ -6,6 +6,13 @@ A theme plugin for [PI-Desktop](https://github.com/vastsa/pi-desktop), ported fr
 [huacnlee/zed-theme-macos-classic](https://github.com/huacnlee/zed-theme-macos-classic),
 with light and dark themes
 
+<table>
+<tr>
+<td><img src="dist/media/PI-Mac-OS-Classic-Theme-Light.png" alt="macOS Classic Light" width="480"></td>
+<td><img src="dist/media/PI-Mac-OS-Classic-Theme-Dark.png" alt="macOS Classic Dark" width="480"></td>
+</tr>
+</table>
+
 ## Architecture
 
 ```text

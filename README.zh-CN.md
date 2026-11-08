@@ -6,6 +6,13 @@
 [huacnlee/zed-theme-macos-classic](https://github.com/huacnlee/zed-theme-macos-classic)，
 含浅色与深色两套主题
 
+<table>
+<tr>
+<td><img src="dist/media/PI-Mac-OS-Classic-Theme-Light.png" alt="macOS Classic Light" width="480"></td>
+<td><img src="dist/media/PI-Mac-OS-Classic-Theme-Dark.png" alt="macOS Classic Dark" width="480"></td>
+</tr>
+</table>
+
 ## 项目架构预览
 
 ```text
